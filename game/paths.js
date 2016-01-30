@@ -1,5 +1,5 @@
 var maps = [
-	{start: [50, 50], pathPoints: [[50, 50], [200, 60], [50, 300], [280, 320], [400, 130], [520, 190], [560, 360], [420, 420]], pathWidth: 80, grassWidth: 100, authorTime: 885, bestTime: []},
+	{start: [50, 50], pathPoints: [[50, 50], [200, 60], [50, 300], [280, 320], [400, 130], [520, 190], [560, 360], [420, 420]], pathWidth: 80, grassWidth: 100, grassSlow: 0.94, authorTime: 885, bestTime: []},
 ]
 
 function Map(id) {
@@ -7,9 +7,9 @@ function Map(id) {
 	var t = this.map.authorTime;
 	this.medals = {
 		author: t, 
-		gold: Math.floor((t * 1.1) / 10) * 10, 
-		silver: Math.floor((t * 1.7) / 10) * 10, 
-		bronze: Math.floor((t * 2.5) / 10) * 10
+		gold: Math.floor((t * 1.1) / 50) * 50, 
+		silver: Math.floor((t * 1.7) / 50) * 50, 
+		bronze: Math.floor((t * 2.5) / 50) * 50
 	};
 	this.draw = function() {
 		ctx.beginPath();
@@ -39,7 +39,7 @@ function Map(id) {
 			ctx.font = "7px Arial";
 			drawMedal(canvas.width - 60, 40 + rank * 30, 10, rank);
 			ctx.font = "15px Arial";
-			ctx.fillText(m.medals[i], canvas.width - 30, 40 + rank * 30);
+			ctx.fillText(niceTime(m.medals[i]), canvas.width - 30, 40 + rank * 30);
 			++rank;
 		}
 		/*ctx.lineWidth = 1;

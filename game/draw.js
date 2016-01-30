@@ -3,7 +3,7 @@ function draw() {
 	m.draw();
 	player.draw();
 	ctx.fillStyle = "white";
-	ctx.fillText(time, 300, 30);
+	ctx.fillText(niceTime(time), 300, 30);
 }
 
 function drawMedal(x, y, r, rank) {
@@ -33,4 +33,14 @@ function drawMedal(x, y, r, rank) {
 	ctx.stroke();
 	ctx.fillStyle = ctx.strokeStyle;
 	ctx.fillText("YAY!", x, y + 3);
+}
+
+function niceTime(t) {
+	var sec = Math.floor(t / 50);
+	if (sec < 10)
+		sec = "0" + sec;
+	var mil = Math.floor(t % 50 * 2);
+	if (mil < 10)
+		mil = "0" + mil;
+	return sec + "." + mil;
 }

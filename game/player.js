@@ -5,7 +5,6 @@ function Player() {
 	this.fat = 3;
 	this.maxAccel = 0.01;
 	this.mouseSens = 10000;
-	this.grassSlow = 0.94;
 	this.maxSpeed = 5;
 	this.finished = false;
 	this.pivot = [canvas.width / 2, canvas.height / 2];
@@ -55,7 +54,7 @@ function Player() {
 			if (Math.abs(this.speed[i]) > this.maxSpeed)
 				this.speed[i] = Math.sign(this.speed[0]) * this.maxSpeed;
 			if (dist > m.map.pathWidth / 2)
-				this.speed[i] *= this.grassSlow;
+				this.speed[i] *= m.map.grassSlow;
 			if (dist > m.map.grassWidth / 2)
 				this.die();
 		}
@@ -104,17 +103,20 @@ function Player() {
 		ctx.stroke();
 		if (this.finished) {
 			var rank;
-			if (time < m.medals.author) {
+			if (time <= m.medals.author) {
 				rank = 0;
 			}
-			else if (time < m.medals.gold) {
+			else if (time <= m.medals.gold) {
 				rank = 1;
 			}
-			else if (time < m.medals.silver) {
+			else if (time <= m.medals.silver) {
 				rank = 2;
 			}
-			else if (time < m.medals.bronze) {
+			else if (time <= m.medals.bronze) {
 				rank = 3;
+			}
+			else {
+				return;
 			}
 			drawMedal(canvas.width / 2, canvas.height / 2, 60, rank);
 		}
