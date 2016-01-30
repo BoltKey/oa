@@ -6,6 +6,7 @@ function Player() {
 	this.maxAccel = 0.01;
 	this.mouseSens = 10000;
 	this.maxSpeed = 5;
+	this.started = false;
 	this.finished = false;
 	this.pivot = [canvas.width / 2, canvas.height / 2];
 	this.frame = function() {
@@ -14,7 +15,7 @@ function Player() {
 			this.speed[1] *= 0.95;
 			this.accel = [0, 0];
 		}
-		else {
+		else if (this.started) {
 			
 			++time;
 			this.pivot = this.pos;
@@ -55,11 +56,11 @@ function Player() {
 				this.speed[i] = Math.sign(this.speed[0]) * this.maxSpeed;
 			if (dist > m.map.pathWidth / 2)
 				this.speed[i] *= m.map.grassSlow;
-			if (dist > m.map.grassWidth / 2)
+			if (dist > Math.max(m.map.grassWidth, m.map.pathWidth) / 2)
 				this.die();
 		}
 		//replay
-		if (!this.finished)
+		if (!this.finished && this.started)
 			replay.data.push([this.pos[0], this.pos[1]]);
 		
 		//check for finish
@@ -67,30 +68,31 @@ function Player() {
 			this.win();
 	}
 	this.die = function() {
-		this.pos[0] = m.map.start[0];
-		this.pos[1] = m.map.start[1];
+		this.pos[0] = m.start[0];
+		this.pos[1] = m.start[1];
 		this.speed = [0, 0];
+		this.accel = [0, 0];
 		time = 0;
 		replay.data = [];
 		this.finished = false;
+		this.started = false;
 	}
 	this.win = function() {
 		this.finished = true;
-		if (time < m.map.bestTime.length || m.map.bestTime.length === 0) {
-			m.map.bestTime = JSON.parse(JSON.stringify(replay.data));
+		if (time < m.bestTime.length || m.bestTime.length === 0) {
+			m.bestTime = JSON.parse(JSON.stringify(replay.data));
 			replay.save(currMap + "best");
 		}
 		replay.data = [];
 	}
 	this.draw = function() {
-		if (m.map.bestTime.length > 0) {
+		if (m.bestTime.length > 0) {
 			ctx.beginPath();
-			var r = m.map.bestTime[Math.min(time, m.map.bestTime.length - 2)];
+			var r = m.bestTime[Math.min(time, m.bestTime.length - 2)];
 			ctx.arc(r[0], r[1], this.fat, 0, Math.PI * 2);
 			ctx.fillStyle = "#cccccc";
 			ctx.fill();
 		}
-		ctx.fillRect(this.pivot[0] - 3, this.pivot[1] - 3, 6, 6);
 		ctx.beginPath();
 		ctx.arc(this.pos[0], this.pos[1], this.fat, 0, Math.PI * 2);
 		ctx.fillStyle = "red";

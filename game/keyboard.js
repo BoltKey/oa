@@ -20,11 +20,14 @@ function checkKeys() {
 			keyPress(k);
 		}
 	}
+	lastkd = JSON.parse(JSON.stringify(keysDown));
 }
 
 function keyPress(k) {
 	switch(k) {
+		case 46: e.del(); break;
 		case 82: player.die(); break;
+		case 8: e.undo(); break;
 	}
 }
 function keyHold(k) {
