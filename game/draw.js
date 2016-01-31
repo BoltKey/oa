@@ -7,20 +7,19 @@ function draw() {
 }
 
 function drawMedal(x, y, w, rank) {
-	var img = new Image();
-	
+	var img;
 	switch(rank) {
 		case 3:
-			img.src = "graphics/bronze.png";
+			img = graphics.bronze;
 			break;
 		case 2:
-			img.src = "graphics/silver.png";
+			img = graphics.silver;
 			break;
 		case 1:
-			img.src = "graphics/gold.png";
+			img = graphics.gold;
 			break;
 		case 0:
-			img.src = "graphics/platinum.png";
+			img = graphics.platinum;
 			break;
 	}
 	ctx.drawImage(img, x - w/2, y - w/2, w, w);

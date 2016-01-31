@@ -9,6 +9,7 @@ var editor = "editor";
 var play = "play";
 var menu = "menu";
 var editPlay = "editPlay";
+var graphics = {}
 var e;
 var programState = play;
 
@@ -18,6 +19,12 @@ function toEditor() {
 }
 function main() {
 	// mouse
+	var names = ["bronze", "gold", "levelbutton", "platinum", "silver"];
+	for (var i in names) {
+		var name = names[i];
+		graphics[name] = new Image();
+		graphics[name].src = "graphics/" + name + ".png";
+	}
 	var offset = $("#game").offset();
 	$(document).mousemove(function(e){
     divPos = {
