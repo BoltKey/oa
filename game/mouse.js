@@ -1,6 +1,9 @@
 function click() {
-	if (!player.started && (programState === play || programState === editPlay)) {
-		player.started = true;
+	if ((programState === play || programState === editPlay)) {
+		if (player.started)
+			player.die();
+		else 
+			player.started = true;
 	}
 	else if (programState === editor && divPos.y < canvas.height) {
 		e.click([divPos.x, divPos.y]);

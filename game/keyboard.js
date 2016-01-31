@@ -28,6 +28,7 @@ function keyPress(k) {
 		case 46: e.del(); break;
 		case 82: player.die(); break;
 		case 8: e.undo(); break;
+		case 74: e.special("jump"); break;
 	}
 }
 function keyHold(k) {

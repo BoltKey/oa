@@ -6,33 +6,24 @@ function draw() {
 	ctx.fillText(niceTime(time), 300, 30);
 }
 
-function drawMedal(x, y, r, rank) {
-	ctx.beginPath();
-	ctx.arc(x, y, r, 0, Math.PI * 2);
+function drawMedal(x, y, w, rank) {
+	var img = new Image();
+	
 	switch(rank) {
-		case 0:
-			ctx.fillStyle = "yellow";
-			ctx.strokeStyle = "green";
-			break;
-		case 1:
-			ctx.fillStyle = "yellow";
-			ctx.strokeStyle = "#bbbb00";
+		case 3:
+			img.src = "graphics/bronze.png";
 			break;
 		case 2:
-			ctx.fillStyle = "#eeeeee";
-			ctx.strokeStyle = "#999999";
+			img.src = "graphics/silver.png";
 			break;
-		case 3:
-			ctx.fillStyle = "#cd7f32"
-			ctx.strokeStyle = "#ab6c22";
+		case 1:
+			img.src = "graphics/gold.png";
+			break;
+		case 0:
+			img.src = "graphics/platinum.png";
 			break;
 	}
-	ctx.fill();
-	ctx.lineWidth = r / 12;
-	ctx.textAlign = "center";
-	ctx.stroke();
-	ctx.fillStyle = ctx.strokeStyle;
-	ctx.fillText("YAY!", x, y + 3);
+	ctx.drawImage(img, x - w/2, y - w/2, w, w);
 }
 
 function niceTime(t) {

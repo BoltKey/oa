@@ -45,9 +45,18 @@ function Editor() {
 			m.map.pathPoints.splice(m.map.pathPoints.length - 1, 1);
 	}
 	this.del = function() {
-		var index = m.map.pathPoints.indexOf(this.selected);
-		this.selected = false;
-		m.map.pathPoints.splice(index, 1);
+		if (this.selected) {
+			var index = m.map.pathPoints.indexOf(this.selected);
+			this.selected = false;
+			m.map.pathPoints.splice(index, 1);
+		}
+	}
+	this.special = function(type) {
+		switch(type) {
+			case "jump":
+				m.map.specials.push({pos: m.map.pathPoints.indexOf(this.selected), type: "jump", pow: 10});
+		}
+		m.calcVars();
 	}
 	this.changeGW = function(val) {
 		m.map.grassWidth = val;
