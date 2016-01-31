@@ -45,28 +45,29 @@ function newLevel(a) {
 	player.die();
 }
 function makeMenu() {
-	$('button').remove();
+	$('.button').remove();
 	var a;
 	switch(programState) {
 		case play: 
 			for (var i = 0; i < maps.length; ++i) {
-				a = $("<button type='button' class='button-primary button-box' onclick='newLevel(" + i + ")'>" + i + "</button>");
+				a = $("<div class='button button-level' onclick='newLevel(" + i + ")'>" + i + "</div>");
 				a.css("position", "fixed");
-				a.css("left", 70 + 25 * i);
+				a.css("left", 70 + 35 * i);
 				a.css("top", 530);
-				a.css("width", 20);
+				a.css("width", 30);
+				a.css("height", 25);
 				$("body").append(a);
 			}
 		case menu:
-			a = $("<button type='button' class='button-primary button-box' onclick='toEditor()'>Editor</button>");
+			a = $("<button type='button' class='button button-primary button-box' onclick='toEditor()'>Editor</button>");
 			a.css("position", "fixed");
 			a.css("left", 40);
-			a.css("top", 550);
+			a.css("top", 580);
 			a.css("width", 60);
 			$("body").append(a);
 			break;
 		case editor:
-			a = $("<button type='button' class='button-primary button-box' onclick='e.play()'>Play</button>");
+			a = $("<button type='button' class='button button-primary button-box' onclick='e.play()'>Play</button>");
 			a.css("position", "fixed");
 			a.css("left", 250);
 			a.css("top", 680);
