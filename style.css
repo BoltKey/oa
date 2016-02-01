@@ -1,8 +1,21 @@
 .button-level {
-	background-image: url("https://i.imgur.com/F6mLc0l.png");
+	background-image: url("graphics/levelbutton.png");
 	background-size: 30px;
 	text-align: center;
 	padding-top: 6px;
 	font-family: Impact;
 	color: #2244ff;
+}
+
+body:hover {
+	cursor: Default;
+}
+::-moz-selection { /* firefox new ie? lol */
+    color: none;
+    background: none;
+}
+
+::selection {
+    color: none;
+    background: none;
 }

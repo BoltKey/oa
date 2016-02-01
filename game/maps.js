@@ -6,7 +6,7 @@ var maps = [
 	{"pathPoints":[[130,120],[188,245],[292,342],[479,418],[650,494],[802,533]],"pathWidth":"138","grassWidth":"165","grassSlow":"0.87","authorTime":394,"specials":[{"pos":4,"type":"jump","pow":10}]},
 	{"pathPoints":[[406,153],[319,122],[206,124],[143,204],[153,289],[223,357],[333,356],[425,407],[449,465],[442,527],[363,578],[270,579],[186,535],[137,463]],"specials":[{type:"jump",pos:5,pow:10}],"pathWidth":"65","grassWidth":"84","grassSlow":0.94,"authorTime":973},
 	{"pathPoints":[[50,50],[107,193],[193,265],[293,278],[436,268],[526,274],[613,310],[687,367],[810,480],[867,531]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":539,"specials":[{"pos":8,"type":"jump","pow":10}]},
-	{"pathPoints":[[624,63],[610,195],[556,334],[477,431],[319,488],[200,480],[60,346],[129,94],[276,133],[392,206],[464,279],[623,422],[781,516],[867,542]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":1236,"specials":[{"pos":11,"type":"jump","pow":20}]}
+	{"pathPoints":[[624,63],[610,195],[556,334],[477,431],[319,488],[200,480],[60,346],[129,94],[276,133],[392,206],[464,279],[623,422],[781,516],[867,542]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":1188,"specials":[{"pos":11,"type":"jump","pow":20}]}
 ]
 
 function Map(id) {
@@ -57,11 +57,17 @@ function Map(id) {
 			var s = m.map.specials[i];
 			switch(s.type) {
 				case "jump":
-					/*ctx.beginPath();
-					var p = m.map.pathPoints[s.pos - 1];
-					ctx.arc(p[0], p[1], m.map.pathWidth / 2, 0, Math.PI * 2);
-					ctx.fillStyle = "yellow";
-					ctx.fill();*/
+					var a = this.map.pathPoints[s.pos - 2];
+					var b =	this.map.pathPoints[s.pos - 1];
+					var coef = (this.map.pathWidth / 2) / Math.distance(a, b) ;
+					var x2 = (b[1] - a[1]) * coef;
+					var y2 = (b[0] - a[0]) * coef;
+					ctx.beginPath();
+					ctx.moveTo(b[0] - x2, b[1] + y2);
+					ctx.lineTo(b[0] + x2, b[1] - y2);
+					ctx.lineWidth = 3;
+					ctx.strokeStyle = "orange";
+					ctx.stroke();
 			}
 		}
 		

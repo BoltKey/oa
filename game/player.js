@@ -136,12 +136,20 @@ function Player() {
 			ctx.fillStyle = "#cccccc";
 			ctx.fill();
 		}
-		ctx.beginPath();
+		
 		var add = 0;
 		if (this.jumpLen > 0) {
-				add = - Math.pow(this.airTime - this.jumpLen / 2, 2) + Math.pow(this.jumpLen / 2, 2);
-				add /= 1500;
-			}
+			add = - Math.pow(this.airTime - this.jumpLen / 2, 2) + Math.pow(this.jumpLen / 2, 2);
+			add /= 1500;
+			ctx.beginPath();
+			var rem = (this.jumpLen - this.airTime) / 2;
+			ctx.arc(this.pos[0] + this.speed[0] * rem, this.pos[1] + this.speed[1] * rem, this.fat, 0, Math.PI * 2);
+			ctx.fillStyle = "#000000";
+			ctx.globalAlpha = this.airTime / this.jumpLen;
+			ctx.fill();
+			ctx.globalAlpha = 1;
+		}
+		ctx.beginPath();
 		ctx.arc(this.pos[0], this.pos[1], this.fat + add, 0, Math.PI * 2);
 		ctx.fillStyle = "red";
 		ctx.fill();
