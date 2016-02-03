@@ -34,3 +34,12 @@ function niceTime(t) {
 		mil = "0" + mil;
 	return sec + "." + mil;
 }
+
+function getColorScale(scale) {
+	t = Math.floor(scale * 255);
+	green = (t >= 128 ? 255 : t * 2);
+	red = (t < 128 ? 255 : 2 * (255 - t));
+	if (red < 0) red = 0;
+	if (red > 255) red = 255;
+	return "rgb(" + red + "," + green + ",0)";
+}

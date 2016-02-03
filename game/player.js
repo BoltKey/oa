@@ -23,11 +23,15 @@ function Player() {
 			this.pivot = this.pos;
 			
 			// calculate distance to nearest path
+			var accelMod = [0, 0];
 			var dist = 100000;
 			for (var i = 0; i < m.map.pathPoints.length - 1; ++i) {
 				var spec = $.grep(m.map.specials, function(a) {return a.pos === i + 2})[0];
-				var ground = typeof($.grep(m.map.specials, function(a) {return a.pos === i + 1})[0]) === 'undefined';
+				var spec2 = $.grep(m.map.specials, function(a) {return a.pos === i + 1})[0];
+				// check if next tile is jump endy
+				var ground = typeof($.grep(m.map.specials, function(a) {return a.pos === i + 1 && a.type === 'jump'})[0]) === 'undefined';
 				var a = m.map.pathPoints[i];
+				
 				var b = m.map.pathPoints[i + 1];
 				var x = a[0] - b[0];
 				var y = a[1] - b[1];
@@ -35,16 +39,25 @@ function Player() {
 				var p = ((- a[0] + this.pos[0]) * x + (- a[1] + this.pos[1]) * y) / c;
 				if (p < 0) {
 					if (p > -1) {
-						if (ground)
-							dist = Math.min(dist, Math.distance(this.pos, [a[0] + p * x, a[1] + p * y]));
+						if (ground) {
+							var currDist = Math.distance(this.pos, [a[0] + p * x, a[1] + p * y]);
+							dist = Math.min(dist, currDist);
+							if (currDist < Math.max(m.map.pathWidth, m.map.grassWidth)) {
+								if (typeof(spec2) !== 'undefined') {
+									if (spec2.type === 'turbo') {
+										// trust me, I'm a magician. Also, fuck you future me.
+										var x = Math.sqrt(Math.pow(spec2.pow, 2) / (1 + (Math.pow(Math.tan(spec2.dir), 2)))) * Math.sign((spec2.dir + Math.PI * 1.5) % (Math.PI * 2) - Math.PI);
+										var y = Math.sqrt(Math.pow(spec2.pow, 2) / (1 + (1 / (Math.pow(Math.tan(spec2.dir), 2))))) * Math.sign((spec2.dir + Math.PI) % (Math.PI * 2) - Math.PI);;
+										accelMod = [x, y];
+									}
+								}
+							}
+						}
 					}
 					else {
 						if (ground)
 							dist = Math.min(dist, Math.distance(this.pos, b));
-						
-						// jump
 						if (Math.distance(this.pos, b) < m.map.pathWidth / 2) {
-							
 							if (typeof(spec) !== 'undefined') {
 								if (spec.type === 'jump') {
 									if (this.airTime === 0 && 
@@ -71,8 +84,8 @@ function Player() {
 			var mouse = [divPos.x, divPos.y];
 			var coef = Math.max(1, (Math.distance(mouse, this.pivot)) / (this.maxAccel * this.mouseSens));
 			if (this.airTime === 0) {
-				this.accel[0] = ((divPos.x - this.pivot[0]) / this.mouseSens) / coef;
-				this.accel[1] = ((divPos.y - this.pivot[1]) / this.mouseSens) / coef;
+				this.accel[0] = ((divPos.x - this.pivot[0]) / this.mouseSens) / coef + accelMod[0];
+				this.accel[1] = ((divPos.y - this.pivot[1]) / this.mouseSens) / coef + accelMod[1];
 			}
 			else {
 				this.accel = [0, 0];
