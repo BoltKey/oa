@@ -1,13 +1,15 @@
 var maps = [
-	{"pathPoints":[[50,50],[91,286],[325,253],[508,390],[745,410]],"specials":[],"pathWidth":"200","grassWidth":"220","grassSlow":0.94,"authorTime":386},
+	{"pathPoints":[[289,109],[175,198],[133,346],[256,466],[407,468],[518,358],[649,313],[762,360],[792,508]],"pathWidth":"132","grassWidth":"202","grassSlow":"0.97","authorTime":651,"specials":[]},
 	{pathPoints: [[50, 50], [200, 60], [50, 300], [280, 320], [400, 130], [520, 190], [560, 360], [420, 420]],  "specials":[],pathWidth: 80, grassWidth: 100, grassSlow: 0.94, authorTime: 880},
 	
-	{"pathPoints":[[104,79],[458,121],[189,381],[627,295],[792,423],[324,536]],"pathWidth":"38","grassWidth":"143","specials":[],"grassSlow":"0.94","authorTime":1247},
+	{"pathPoints":[[760,294],[599,214],[487,183],[333,161],[228,168],[181,262],[270,331],[351,355],[462,360],[579,405],[648,479],[606,512],[520,520],[327,539],[81,466]],"pathWidth":80,"grassWidth":"192","grassSlow":0.94,"authorTime":1137,"specials":[]},
+	{"pathPoints":[[597,135],[479,165],[532,207],[368,248],[387,161],[218,221],[276,311],[180,330],[280,444],[332,375],[419,494],[340,511],[410,592]],"pathWidth":"42","grassWidth":"80","grassSlow":"0.91","authorTime":1079,"specials":[]},
+	{"pathPoints":[[883,316],[786,480],[612,537],[377,535],[241,480],[181,381],[383,391],[554,393],[657,365],[674,293],[475,279],[492,175],[747,194],[754,89],[403,58],[363,274],[186,266],[274,79],[143,96],[84,160],[58,235],[61,563]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":2702,"specials":[]},
 	{"pathPoints":[[130,120],[188,245],[292,342],[479,418],[650,494],[802,533]],"pathWidth":"138","grassWidth":"165","grassSlow":"0.87","authorTime":394,"specials":[{"pos":4,"type":"jump","pow":10}]},
 	{"pathPoints":[[406,153],[319,122],[206,124],[143,204],[153,289],[223,357],[333,356],[425,407],[449,465],[442,527],[363,578],[270,579],[186,535],[137,463]],"specials":[{type:"jump",pos:5,pow:10},{type:"turbo",pos:2,pow:0.007,dir:-Math.PI/3}],"pathWidth":"65","grassWidth":"84","grassSlow":0.94,"authorTime":1002},
 	{"pathPoints":[[50,50],[107,193],[193,265],[293,278],[436,268],[526,274],[613,310],[687,367],[810,480],[867,531]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":539,"specials":[{"pos":8,"type":"jump","pow":10}]},
 	{"pathPoints":[[624,63],[610,195],[556,334],[477,431],[319,488],[200,480],[60,346],[129,94],[276,133],[392,206],[464,279],[623,422],[781,516],[867,542]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":1188,"specials":[{"pos":11,"type":"jump","pow":20},{"type":"turbo","pos":8,"dir":0.2,"pow":0.01}]},
-	{"pathPoints":[[139,191],[222,277],[329,339],[433,413],[542,386],[624,335],[693,228],[646,140],[568,72],[479,55],[415,90],[296,276],[253,341],[142,520],[79,605]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":0,"specials":[{"pos":13,"type":"jump","pow":10},{"type":"turbo","pos":11,"dir":Math.PI * 0.68,"pow":0.02}]}
+	{"pathPoints":[[139,191],[222,277],[329,339],[433,413],[542,386],[624,335],[693,228],[646,140],[568,72],[479,55],[415,90],[296,276],[253,341],[142,520],[79,605]],"pathWidth":80,"grassWidth":100,"grassSlow":0.94,"authorTime":990,"specials":[{"pos":13,"type":"jump","pow":10},{"type":"turbo","pos":11,"dir":Math.PI * 0.68,"pow":0.02}]}
 ]
 
 function Map(id) {
@@ -96,8 +98,6 @@ function Map(id) {
 					ctx.stroke();
 			}
 		}
-		
-		// medals
 		ctx.beginPath();
 		ctx.arc(point[0], point[1], this.map.grassWidth / 2, 0, Math.PI * 2);
 		ctx.fillStyle = "#00ff00";

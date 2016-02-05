@@ -1,26 +1,43 @@
 function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	m.draw();
-	player.draw();
-	ctx.fillStyle = "white";
-	ctx.fillText(niceTime(time), 300, 30);
+	if (programState === play || programState === editPlay || programState === editor)
+	{
+		m.draw();
+		player.draw();
+		ctx.fillStyle = "white";
+		ctx.fillText(niceTime(time), 300, 30);
+	}
+	if (programState === menu && menuid === 1) {
+		for (var i = 0; i < medals.length; ++i) {
+			var rank = medals[i];
+			for (var j = 3; j >= rank; --j) {
+				drawMedal(levelParams.x + (levelParams.padding[0] + levelParams.w) * (Math.floor(i / levelParams.rows)) + 90 - 10 * j, 
+				levelParams.y + (levelParams.padding[1] + 40) * (i % levelParams.rows) + 15, 
+				30,
+				j)
+			}
+		}
+	}
 }
 
 function drawMedal(x, y, w, rank) {
 	var img;
+	var small = w <= 30 ? "small" : "";
 	switch(rank) {
 		case 3:
-			img = graphics.bronze;
+			img = graphics["bronze" + small];
 			break;
 		case 2:
-			img = graphics.silver;
+			img = graphics["silver" + small];
 			break;
 		case 1:
-			img = graphics.gold;
+			img = graphics["gold" + small];
 			break;
 		case 0:
-			img = graphics.platinum;
+			img = graphics["platinum" + small];
 			break;
+		default:
+			return;
 	}
 	ctx.drawImage(img, x - w/2, y - w/2, w, w);
 }

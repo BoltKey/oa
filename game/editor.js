@@ -2,19 +2,19 @@ function Editor() {
 	this.selected = false;
 	this.setup = function() {
 		programState = editor;
-		var a = $("<div>Path w<input id='pathw' class='editor' type='range' min='20' max='200' oninput='e.changePW(this.value)'></input></div>");
+		var a = $("<div class='ed'>Path w<input id='pathw' class='editor' type='range' min='20' max='200' oninput='e.changePW(this.value)'></input></div>");
 		a.css("position", "fixed");
 		a.css("left", 40);
 		a.css("top", 640);
 		a.css("width", 200);
 		$("body").append(a);
-		var a = $("<div>Grass w<input id='grassw' class='editor' type='range' min='20' max='220' oninput='e.changeGW(this.value)'></input></div>");
+		var a = $("<div class='ed'>Grass w<input id='grassw' class='editor' type='range' min='20' max='220' oninput='e.changeGW(this.value)'></input></div>");
 		a.css("position", "fixed");
 		a.css("left", 40);
 		a.css("top", 660);
 		a.css("width", 200);
 		$("body").append(a);
-		var a = $("<div>Grass slow<input id='grasss' class='editor' type='range' min='0.8' max='0.99' step='0.01' oninput='e.changeGS(this.value)'></input></div>");
+		var a = $("<div class='ed'>Grass slow<input id='grasss' class='editor' type='range' min='0.8' max='0.99' step='0.01' oninput='e.changeGS(this.value)'></input></div>");
 		a.css("position", "fixed");
 		a.css("left", 40);
 		a.css("top", 680);

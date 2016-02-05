@@ -9,17 +9,24 @@ var editor = "editor";
 var play = "play";
 var menu = "menu";
 var editPlay = "editPlay";
-var graphics = {}
+var menuid = 0;
+var graphics = {};
 var e;
-var programState = play;
+var programState = menu;
+var medals = [];
 
+function navigateMenu(id) {
+	menuid = id;
+	programState = "menu";
+	makeMenu();
+}
 function toEditor() {
 	e = new Editor();
 	makeMenu();
 }
 function main() {
 	// mouse
-	var names = ["bronze", "gold", "levelbutton", "platinum", "silver"];
+	var names = ["bronze", "gold", "levelbutton", "platinum", "silver", "bronzesmall", "silversmall", "goldsmall", "platinumsmall"];
 	for (var i in names) {
 		var name = names[i];
 		graphics[name] = new Image();
@@ -41,56 +48,58 @@ function main() {
 	document.body.onmouseup = function() { 
 		mouseDown = 0;
 	}
-	makeMenu();
-	m = new Map(0);
+	
+	//m = new Map(0);
 	replay = new Replay();
 	player = new Player();
+	updateMedals();
+	makeMenu();
 	mainloop();
+	
 }
 function newLevel(a) {
 	m = new Map(a);
+	currMap = a;
+	replay.load(a + "best");
+	m.bestTime = replay.data;
+	programState = play;
 	player.die();
+	makeMenu();
 }
-function makeMenu() {
-	$('.button').remove();
-	var a;
-	switch(programState) {
-		case play: 
-			for (var i = 0; i < maps.length; ++i) {
-				a = $("<div class='button button-level' onclick='newLevel(" + i + ")'>" + i + "</div>");
-				a.css("position", "fixed");
-				a.css("left", 70 + 35 * i);
-				a.css("top", 530);
-				a.css("width", 30);
-				a.css("height", 25);
-				$("body").append(a);
-			}
-		case menu:
-			a = $("<button type='button' class='button button-primary button-box' onclick='toEditor()'>Editor</button>");
-			a.css("position", "fixed");
-			a.css("left", 40);
-			a.css("top", 580);
-			a.css("width", 60);
-			$("body").append(a);
-			break;
-		case editor:
-			a = $("<button type='button' class='button button-primary button-box' onclick='e.play()'>Play</button>");
-			a.css("position", "fixed");
-			a.css("left", 250);
-			a.css("top", 680);
-			a.css("width", 60);
-			$("body").append(a);
-			break;
-		case editPlay:
-			a = $("<button type='button' class='button-primary button-box' onclick='e.back()'>Edit</button>");
-			a.css("position", "fixed");
-			a.css("left", 250);
-			a.css("top", 680);
-			a.css("width", 60);
-			$("body").append(a);
-			break;
+
+
+
+function updateMedals() {
+	for (var i = 0; i < maps.length; ++i) {
+		var m = new Map(i);
+		replay.load(i + "best");
+		var time = replay.data.length;
+		if (time === 0) time = 1000000;
+		if (time <= m.medals.author) {
+			rank = 0;
+		}
+		else if (time <= m.medals.gold) {
+			rank = 1;
+		}
+		else if (time <= m.medals.silver) {
+			rank = 2;
+		}
+		else if (time <= m.medals.bronze) {
+			rank = 3;
+		}
+		else {
+			rank = 4;
+		}
+		medals[i] = rank;
 	}
-	
+}
+
+function escBack() {
+	if (programState === play) {
+		navigateMenu(1);
+		return;
+	}
+	navigateMenu(0);
 }
 function mainloop() {
 	requestAnimationFrame(mainloop);
