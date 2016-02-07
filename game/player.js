@@ -120,8 +120,9 @@ function Player() {
 			this.win();
 	}
 	this.die = function() {
-		replay.ghosts = [];
+		//
 		if (m.bestTime.length > 0) {
+			replay.ghosts = [];
 			replay.ghosts.push(m.bestTime);
 		}
 		this.pos[0] = m.start[0];
