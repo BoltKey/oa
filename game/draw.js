@@ -5,7 +5,7 @@ function draw() {
 		m.draw();
 		player.draw();
 		ctx.fillStyle = "white";
-		ctx.fillText(niceTime(time), 300, 30);
+		ctx.fillText(niceTime(time), canvas.width - 45, 180);
 	}
 	if (programState === menu && menuid === 1) {
 		for (var i = 0; i < medals.length; ++i) {

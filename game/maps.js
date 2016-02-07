@@ -107,7 +107,7 @@ function Map(id) {
 		var rank = 0;
 		for (var i in m.medals) {
 			ctx.font = "7px Arial";
-			drawMedal(canvas.width - 60, 40 + rank * 30, 30, rank);
+			drawMedal(canvas.width - 60, 35 + rank * 30, 30, rank);
 			ctx.font = "15px Arial";
 			ctx.fillStyle = "black";
 			ctx.fillText(niceTime(m.medals[i]), canvas.width - 45, 40 + rank * 30);

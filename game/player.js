@@ -120,6 +120,10 @@ function Player() {
 			this.win();
 	}
 	this.die = function() {
+		replay.ghosts = [];
+		if (m.bestTime.length > 0) {
+			replay.ghosts.push(m.bestTime);
+		}
 		this.pos[0] = m.start[0];
 		this.pos[1] = m.start[1];
 		this.speed = [0, 0];
@@ -132,15 +136,18 @@ function Player() {
 		this.started = false;
 	}
 	this.win = function() {
-		this.finished = true;
-		if (time < m.bestTime.length || m.bestTime.length === 0) {
-			m.bestTime = JSON.parse(JSON.stringify(replay.data));
-			replay.save(currMap + "best");
+		if (!this.finished) {
+			this.finished = true;
+			if (time < m.bestTime.length || m.bestTime.length === 0) {
+				m.bestTime = JSON.parse(JSON.stringify(replay.data));
+				replay.save(currMap + "best");
+			}
+			submitTime(JSON.stringify(replay.data));
+			replay.data = [];
 		}
-		replay.data = [];
 	}
 	this.draw = function() {
-		if (m.bestTime.length > 0) {
+		/*if (m.bestTime.length > 0) {
 			ctx.beginPath();
 			var r = m.bestTime[Math.min(time, m.bestTime.length - 2)];
 			var add = 0;
@@ -148,7 +155,8 @@ function Player() {
 			ctx.arc(r[0], r[1], this.fat + add, 0, Math.PI * 2);
 			ctx.fillStyle = "#cccccc";
 			ctx.fill();
-		}
+		}*/
+		replay.drawGhosts();
 		
 		var add = 0;
 		if (this.jumpLen > 0) {

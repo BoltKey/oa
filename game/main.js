@@ -10,6 +10,9 @@ var play = "play";
 var menu = "menu";
 var editPlay = "editPlay";
 var menuid = 0;
+var userid = -1;
+var version = "0.1";
+var wipeSave = true;
 var graphics = {};
 var e;
 var programState = menu;
@@ -49,6 +52,12 @@ function main() {
 		mouseDown = 0;
 	}
 	
+	// local save stuff
+	var a = localStorage.getItem("oaversion");
+	if ((a != version && wipeSave) || a == null) {
+		localStorage.clear();
+	}
+	localStorage.setItem("oaversion", version);
 	//m = new Map(0);
 	replay = new Replay();
 	player = new Player();
