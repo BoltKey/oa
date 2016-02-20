@@ -68,6 +68,7 @@ function Player() {
 									Math.distance(this.pos, b) < m.map.pathWidth) {
 										this.jumpLen = spec.pow * 10;
 										this.airTime = 1;
+										sounds.jump.play();
 									}
 								}
 							}
@@ -158,7 +159,7 @@ function Player() {
 			this.finished = true;
 			if (userid > -1 && currMap > -1)
 				submitTime(JSON.stringify(replay.data));
-			else {
+			else if (userid === -1) {
 				if (time < m.bestTime.length || m.bestTime.length === 0) {
 					m.bestTime = JSON.parse(JSON.stringify(replay.data));
 					replay.save(currMap + "best");

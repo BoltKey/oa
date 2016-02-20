@@ -65,7 +65,7 @@ function main() {
 	settings.muted = false;
 	
 	//sounds
-	var names = ["bronze", "gold", "platinum", "silver", "grass"];
+	var names = ["bronze", "gold", "platinum", "silver", "grass", "jump"];
 	for (var i in names) {
 		var name = names[i];
 		sounds[name] = new Audio();
