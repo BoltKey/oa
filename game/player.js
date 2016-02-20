@@ -103,8 +103,10 @@ function Player() {
 			if (this.airTime === 0) {
 				if (dist > m.map.pathWidth / 2) {
 					this.speed[i] *= m.map.grassSlow;
-					sounds.grass.play();
-					grassEmitter.behaviours[1] = new Proton.Alpha(0.5, 0);
+					if (!settings.mute)
+						sounds.grass.play();
+					if (settings.parts) 
+						grassEmitter.behaviours[1] = new Proton.Alpha(0.5, 0);
 					grassEmitter.rate.nextTime = 0.06 / ((Math.distance([0, 0], this.speed) * (1 - m.map.grassSlow)) * 50);
 					this.lastState = "grass";
 				}
@@ -244,23 +246,23 @@ function Player() {
 			var rank;
 			if (time <= m.medals.author && e > firstMedal + medalDelay * 3) {
 				rank = 0;
-				if (e < firstMedal + medalDelay * 3 + 20) {
+				if (e < firstMedal + medalDelay * 3 + 20 && !settings.mute) {
 					sounds.platinum.play();
 				}
 			}
 			else if (time <= m.medals.gold && e > firstMedal + medalDelay * 2) {
 				rank = 1;
-				if (e < firstMedal + medalDelay * 2 + 20)
+				if (e < firstMedal + medalDelay * 2 + 20 && !settings.mute)
 					sounds.gold.play();
 			}
 			else if (time <= m.medals.silver && e > firstMedal + medalDelay) {
 				rank = 2;
-				if (e < firstMedal + medalDelay + 20)
+				if (e < firstMedal + medalDelay + 20 && !settings.mute)
 					sounds.silver.play();
 			}
 			else if (time <= m.medals.bronze && e > firstMedal) {
 				rank = 3;
-				if (e < firstMedal + medalDelay + 20)
+				if (e < firstMedal + medalDelay + 20 && !settings.mute)
 					sounds.bronze.play();
 			}
 			else {

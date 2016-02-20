@@ -5,18 +5,20 @@ function BKLogo(callback) {
 	ctx.fillText("Loading... If you can read this, something went wrong probably", 10, 10);
 	this.timer = 0;
 	this.tick = function() {
-		/*++this.timer;
+		++this.timer;
 		if (this.timer <= 120) {
 			requestAnimationFrame(this.tick);
 			this.drawLog(this.timer);
 		}
-		else*/ 
+		else
 			callback();
 	}
 	this.logoimg = new Image();
 	this.logoimg.src = "http://boltkey.cz/boltkeylogo.png";
 	this.drawLog = function(a) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = "white";
+		ctx.fillRect(Math.floor(canvas.width / 2 - 150), Math.floor(canvas.height / 2 - 145), 300, 340); 
 		ctx.drawImage(this.logoimg, Math.floor(canvas.width / 2 - 125), Math.floor(canvas.height / 2 - 120), 250, 240);
 		ctx.fillStyle = "rgb(100, 100, 100)";
 		ctx.font = "50px arial";
