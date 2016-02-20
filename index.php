@@ -1,8 +1,9 @@
 <head>
 <meta charset="utf-8" />
-<title>Optimize accel</title>
+<title>Optimal racer</title>
 <link rel="shortcut icon" href="/boltlogo.png">
 <script type="text/javascript" src="jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="proton-1.0.0.min.js"></script>
 <link href="buttons.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 <!--<script src='https://cdn1.kongregate.com/javascripts/kongregate_api.js'></script>-->

@@ -1,9 +1,9 @@
-var menuButtons = [{display: "Select level", pos: [50, 100], w: 100, click: "navigateMenu(1)", menu:[0]},
-
-
-
+var menuButtons = [
+{display: "Editor", pos: [50, 550], w: 100, click: "toEditor()", menu:[1]},
+{display: "Display best ghosts", pos: [180, 550], w: 150, click: 'changeSetting("gho")', menu:[1], id: 'sgho'},
+{display: "Display your ghost", pos: [180, 500], w: 150, click: 'changeSetting("plgho")', menu:[1], id: 'splgho'},
 ];
-var levelParams = {x: 50, y: 50, padding: [180, 10], rows: 5, w: 35};
+var levelParams = {x: 50, y: 40, padding: [180, 4], rows: 10, w: 35};
 
 function makeMenu() {
 	$('button').remove();
@@ -17,6 +17,8 @@ function makeMenu() {
 				var b = menuButtons[i];
 				if (b.menu.indexOf(menuid) > -1) {
 					a = $("<button type='button' class='button button-primary button-box' onclick='" + b.click + "'>" + b.display + "</button>");
+					if (typeof(b.id) !== 'undefined')
+						a.attr('id', b.id);
 					a.css("position", "fixed");
 					a.css("left", b.pos[0]);
 					a.css("top", b.pos[1]);
@@ -36,12 +38,7 @@ function makeMenu() {
 					$("body").append(a);
 				}
 			}
-			a = $("<button type='button' class='button button-primary button-box' onclick='toEditor()'>Editor</button>");
-			a.css("position", "fixed");
-			a.css("left", 40);
-			a.css("top", 580);
-			a.css("width", 60);
-			$("body").append(a);
+			settingsColors();
 			break;
 		case play:
 			break;

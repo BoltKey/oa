@@ -4,10 +4,14 @@ function draw() {
 	{
 		m.draw();
 		player.draw();
-		ctx.fillStyle = "white";
-		ctx.fillText(niceTime(time), canvas.width - 45, 180);
+		
 	}
 	if (programState === menu && menuid === 1) {
+		// medal menu
+		ctx.fillStyle = "white";
+		ctx.font = '16px Arial';
+		ctx.textAlign = 'center';
+		ctx.fillText("Total players: " + totalPlayers, 70, 20)
 		for (var i = 0; i < medals.length; ++i) {
 			var rank = medals[i];
 			for (var j = 3; j >= rank; --j) {
@@ -16,6 +20,20 @@ function draw() {
 				30,
 				j)
 			}
+		}
+		for (var i in playerBests) {
+			i = - -i;  // I know what am I doing
+			ctx.fillText(
+				niceTime(playerBests[i][0]) + (userid > -1 ? ("; " + playerBests[i][1] + "/" + playerBests[i][2]) : ""), 
+				levelParams.x + (levelParams.padding[0] + levelParams.w) * (Math.floor(i / levelParams.rows)) + 160, 
+				levelParams.y + (levelParams.padding[1] + 40) * (i % levelParams.rows) + 20
+			); 
+			
+		}
+		if (userid === -1) {
+			ctx.fillText("Log in to ", 50, canvas.height - 20);
+			ctx.drawImage(graphics.kongregate_white, 85, canvas.height - 45, 214, 32);
+			ctx.fillText("to compare with other players and submit your times", 485, canvas.height - 20);
 		}
 	}
 }

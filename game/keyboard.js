@@ -12,7 +12,8 @@ $(document).keydown(function(ev) {
 $(document).keyup(function(ev) { keysDown.splice(keysDown.indexOf(ev.keyCode), 1) } );
 
 function checkKeys() {
-	for (k of keysDown) {
+	for (var i in keysDown) {
+		var k = keysDown[i];
 		if (lastkd.indexOf(k) > -1) {
 			keyHold(k);
 		}

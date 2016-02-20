@@ -7,9 +7,39 @@ function entry(name) {
 		success: function(data) {
 			console.log(data);
 			userid = data;
+			userName = name;
+			loadUserBests();
 			//userid = data;
 		}
 	});
+}
+
+function loadUserBests() {
+	console.log("Loading scores for player " + userName);
+	if (userid > -1) {
+		$.ajax({
+			method: "POST",
+			url: "php/getbests.php",
+			data: {
+				userid: userid,
+			},
+			crossDomain: true,
+			success: function(data) {
+				var a = JSON.parse(data);
+				playerBests = a;
+				updateMedals();
+			},
+		});
+	}
+	else {
+		playerBests = [];
+		for (var i = 0; i < maps.length; ++i) {
+			var m = new Map(i);
+			if (m.bestTime.length > 0) {
+				playerBests[i] = [m.bestTime.length, 0, 0];
+			}
+		}
+	}
 }
 
 function submitTime(data) {
@@ -22,30 +52,75 @@ function submitTime(data) {
 			data: data,
 			time: time,
 			map: currMap,
+			own: false
 		},
 		crossDomain: true,
 		success: function(data) {
-			console.log(data);
+			loadUserBests();
 			//userid = data;
 		}
 	});
 }
 
-function getGhosts(players, map) {
-	console.log("Getting ghosts");
+
+function loadGhosts(map) {
+	console.log("Getting replays for map " + map);
 	$.ajax({
 		method: "POST",
-		url: "php/getghost.php",
+		url: "php/getscores.php",
 		data: {
-			players: JSON.stringify(players),
 			map: map,
+			replay: true,
+			own: settings.plgho,
+			bests: settings.gho,
+			userid: userid,
+			max: 8
 		},
 		crossDomain: true,
 		success: function(data) {
-			console.log(data);
-			var replays = JSON.parse(data);
-			replay.ghosts = replay.ghosts.concat(replays);
-			//userid = data;
-		}
+			var a = JSON.parse(data);
+			if (settings.plgho && userid === -1) {
+				m = new Map(map);
+				a.push(["You", -1, m.bestTime]);
+			}
+			for (var i in a) {
+				var r = a[i];
+				replay.ghosts.push(r[2]);
+				replay.ghostNames.push(r[0]);
+			}
+		},
+	});
+}
+
+function loadScores(map) {
+	console.log("Loading scores for map " + map);
+	$.ajax({
+		method: "POST",
+		url: "php/getscores.php",
+		data: {
+			map: map,
+			replay: false,
+			own: true,
+			bests: true,
+			max: 1000000,
+			userid: userid
+		},
+		crossDomain: true,
+		success: function(data) {
+			var a = JSON.parse(data);
+			scores = a;
+		},
+	});
+}
+
+function countPlayers() {
+	console.log("Loading number of players");
+	$.ajax({
+		method: "POST",
+		url: "php/playersnum.php",
+		crossDomain: true,
+		success: function(data) {
+			totalPlayers = - - data;
+		},
 	});
 }

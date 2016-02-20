@@ -1,8 +1,10 @@
 function click() {
 	if ((programState === play || programState === editPlay)) {
-		if (player.started)
+		if (player.finished && player.effect < 250)
+			player.effect = 250;
+		else if (player.started)
 			player.die();
-		else 
+		else
 			player.started = true;
 	}
 	else if (programState === editor && divPos.y < canvas.height) {

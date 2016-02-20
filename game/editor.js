@@ -1,6 +1,8 @@
 function Editor() {
 	this.selected = false;
 	this.setup = function() {
+		currMap = -1;
+		
 		programState = editor;
 		var a = $("<div class='ed'>Path w<input id='pathw' class='editor' type='range' min='20' max='200' oninput='e.changePW(this.value)'></input></div>");
 		a.css("position", "fixed");

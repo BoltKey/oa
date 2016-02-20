@@ -10,12 +10,16 @@ function Player() {
 	this.finished = false;
 	this.airTime = 0;
 	this.jumpLen = 0;
+	this.effect = 0;
+	this.rank = -1;
+	this.lastState = "road";
 	this.pivot = [canvas.width / 2, canvas.height / 2];
 	this.frame = function() {
 		if (this.finished) {
 			this.speed[0] *= 0.95;
 			this.speed[1] *= 0.95;
 			this.accel = [0, 0];
+			++this.effect;
 		}
 		else if (this.started) {
 			
@@ -75,10 +79,7 @@ function Player() {
 					if (ground)
 						dist = Math.min(dist, Math.distance(this.pos, a));
 				}
-				
 			}
-			//console.log("p: " + p);
-			//console.log("dist: "+  dist);
 			
 			// update of accel based on mousepos
 			var mouse = [divPos.x, divPos.y];
@@ -95,11 +96,23 @@ function Player() {
 		for (var i = 0; i < 2; ++i) {
 			this.pos[i] += this.speed[i];
 			this.speed[i] += this.accel[i];
+			
 			if (Math.abs(this.speed[i]) > this.maxSpeed)
 				this.speed[i] = Math.sign(this.speed[0]) * this.maxSpeed;
 			if (this.airTime === 0) {
-				if (dist > m.map.pathWidth / 2)
+				if (dist > m.map.pathWidth / 2) {
 					this.speed[i] *= m.map.grassSlow;
+					sounds.grass.play();
+					grassEmitter.behaviours[1] = new Proton.Alpha(0.5, 0);
+					grassEmitter.rate.nextTime = 0.06 / ((Math.distance([0, 0], this.speed) * (1 - m.map.grassSlow)) * 50);
+					this.lastState = "grass";
+				}
+				else {
+					sounds.grass.pause();
+					sounds.grass.currentTime = 0;
+					this.lastState = "road";
+					grassEmitter.behaviours[1] = new Proton.Alpha(0, 0);
+				}
 				if (dist > Math.max(m.map.grassWidth, m.map.pathWidth) / 2)
 					this.die();
 			}
@@ -111,6 +124,8 @@ function Player() {
 				}
 			}
 		}
+		grassEmitter.p.x = this.pos[0];
+		grassEmitter.p.y = this.pos[1];
 		//replay
 		if (!this.finished && this.started)
 			replay.data.push([Math.floor(this.pos[0]), Math.floor(this.pos[1])]);
@@ -120,10 +135,11 @@ function Player() {
 			this.win();
 	}
 	this.die = function() {
-		//
-		if (m.bestTime.length > 0) {
-			replay.ghosts = [];
-			replay.ghosts.push(m.bestTime);
+		replay.ghosts = [];
+		replay.ghostNames = [];
+		if (programState !== editor) {
+			loadGhosts(currMap);
+			loadScores(currMap);
 		}
 		this.pos[0] = m.start[0];
 		this.pos[1] = m.start[1];
@@ -135,28 +151,43 @@ function Player() {
 		replay.data = [];
 		this.finished = false;
 		this.started = false;
+		this.rank = 0;
 	}
 	this.win = function() {
 		if (!this.finished) {
 			this.finished = true;
-			if (time < m.bestTime.length || m.bestTime.length === 0) {
-				m.bestTime = JSON.parse(JSON.stringify(replay.data));
-				replay.save(currMap + "best");
+			if (userid > -1 && currMap > -1)
+				submitTime(JSON.stringify(replay.data));
+			else {
+				if (time < m.bestTime.length || m.bestTime.length === 0) {
+					m.bestTime = JSON.parse(JSON.stringify(replay.data));
+					replay.save(currMap + "best");
+				}
+				loadUserBests();
 			}
-			submitTime(JSON.stringify(replay.data));
 			replay.data = [];
+			this.effect = 0;
+			if (typeof(scores) !== 'undefined') {
+				if (scores.length === 0) {
+					this.rank = 1;
+				}
+				else {
+					for (var i = 0; i < scores.length; ++i) {
+						var s = scores[i];
+						if (- ( - s[2]) > time) {
+							this.rank = i + 1;
+							break;
+						}
+					}
+					this.rank = i + 1;
+				}
+			}
+			
 		}
 	}
 	this.draw = function() {
-		/*if (m.bestTime.length > 0) {
-			ctx.beginPath();
-			var r = m.bestTime[Math.min(time, m.bestTime.length - 2)];
-			var add = 0;
-			
-			ctx.arc(r[0], r[1], this.fat + add, 0, Math.PI * 2);
-			ctx.fillStyle = "#cccccc";
-			ctx.fill();
-		}*/
+		proton.update();
+		ctx.globalAlpha = 1;
 		replay.drawGhosts();
 		
 		var add = 0;
@@ -181,24 +212,72 @@ function Player() {
 		ctx.strokeStyle = "red";
 		ctx.lineWidth = 1;
 		ctx.stroke();
+		
 		if (this.finished) {
-			var rank;
-			if (time <= m.medals.author) {
-				rank = 0;
-			}
-			else if (time <= m.medals.gold) {
-				rank = 1;
-			}
-			else if (time <= m.medals.silver) {
-				rank = 2;
-			}
-			else if (time <= m.medals.bronze) {
-				rank = 3;
+			// shitload of stats etc here
+			var e = this.effect;
+			var firstMedal = 100;
+			var medalDelay = 40;
+			var fadeIn = 15;
+			ctx.textAlign = 'center';
+			ctx.fillStyle = 'white';
+			ctx.font = '20px Arial';
+			ctx.globalAlpha = Math.max(0, Math.min(1, e / fadeIn));
+			ctx.fillText("Your time was " + niceTime(time), canvas.width / 2, 100);
+			ctx.globalAlpha = Math.max(0, Math.min(1, (e - 50) / fadeIn));
+			var s;
+			if (userid > -1) {
+				s = "That's better than " + Math.floor((1 - (this.rank - 1) / (scores.length)) * 1000) / 10 + "% of players (your rank is " + this.rank + "/" + (scores.length + 1) + ")";
 			}
 			else {
+				s = "Login to Kongregate to compare your times with other players."
+			}
+			ctx.fillText(s, canvas.width / 2, 130);
+			ctx.globalAlpha = Math.max(0, Math.min(1, (e - 100) / fadeIn));
+			ctx.fillText("Medals earned: ", canvas.width / 2, 180);
+			
+			if (e > firstMedal - medalDelay) {
+				ctx.fillStyle = "#333333";
+				ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 - 120, 240, 240);
+			}
+			var rank;
+			if (time <= m.medals.author && e > firstMedal + medalDelay * 3) {
+				rank = 0;
+				if (e < firstMedal + medalDelay * 3 + 20) {
+					sounds.platinum.play();
+				}
+			}
+			else if (time <= m.medals.gold && e > firstMedal + medalDelay * 2) {
+				rank = 1;
+				if (e < firstMedal + medalDelay * 2 + 20)
+					sounds.gold.play();
+			}
+			else if (time <= m.medals.silver && e > firstMedal + medalDelay) {
+				rank = 2;
+				if (e < firstMedal + medalDelay + 20)
+					sounds.silver.play();
+			}
+			else if (time <= m.medals.bronze && e > firstMedal) {
+				rank = 3;
+				if (e < firstMedal + medalDelay + 20)
+					sounds.bronze.play();
+			}
+			else {
+				ctx.globalAlpha = 1;
 				return;
 			}
+			
 			drawMedal(canvas.width / 2, canvas.height / 2, 200, rank);
+			ctx.globalAlpha = Math.max(0, Math.min(1, (e - 150) / fadeIn));
+			ctx.fillStyle = 'white';
+			ctx.fillText("Best times for this track", canvas.width - 210, 240);
+			for (var i = 0; i < Math.min(10, scores.length); ++i) {
+				var s = scores[i];
+				ctx.fillText(s[0] + ": " + niceTime(s[2]), canvas.width - 210, 260 + i * 20);
+			}
+			ctx.globalAlpha = Math.max(0, Math.min(1, (e - 200) / fadeIn));
+			ctx.fillText("Click to try again, press Esc to select another level", canvas.width / 2, canvas.height - 150);
 		}
+		ctx.globalAlpha = 1;
 	}
 }
