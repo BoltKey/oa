@@ -1,5 +1,6 @@
 <?php 
 header('Access-Control-Allow-Origin: http://game251444.konggames.com');
+header('Access-Control-Allow-Origin: http://localhost');
 require ('db_connect.php');
 $replays = [];
 $times = [];

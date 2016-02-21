@@ -1,7 +1,8 @@
+var orig = "http://localhost/optimize_accel/";
 function entry(name) {
 	console.log("Entrying '" + name + "'");
 	$.ajax({
-		url: "php/entry.php?name=" + name,
+		url: orig + "php/entry.php?name=" + name,
 		type: "GET",
 		crossDomain: true,
 		success: function(data) {
@@ -19,7 +20,7 @@ function loadUserBests() {
 	if (userid > -1) {
 		$.ajax({
 			method: "POST",
-			url: "php/getbests.php",
+			url: orig + "php/getbests.php",
 			data: {
 				userid: userid,
 			},
@@ -46,7 +47,7 @@ function submitTime(data) {
 	console.log("Submitting time");
 	$.ajax({
 		method: "POST",
-		url: "php/submittime.php",
+		url: orig + "php/submittime.php",
 		data: {
 			userid: userid,
 			data: data,
@@ -67,7 +68,7 @@ function loadGhosts(map) {
 	console.log("Getting replays for map " + map);
 	$.ajax({
 		method: "POST",
-		url: "php/getscores.php",
+		url: orig + "php/getscores.php",
 		data: {
 			map: map,
 			replay: true,
@@ -96,7 +97,7 @@ function loadScores(map) {
 	console.log("Loading scores for map " + map);
 	$.ajax({
 		method: "POST",
-		url: "php/getscores.php",
+		url: orig + "php/getscores.php",
 		data: {
 			map: map,
 			replay: false,
@@ -117,7 +118,7 @@ function countPlayers() {
 	console.log("Loading number of players");
 	$.ajax({
 		method: "POST",
-		url: "php/playersnum.php",
+		url: orig + "php/playersnum.php",
 		crossDomain: true,
 		success: function(data) {
 			totalPlayers = - - data;

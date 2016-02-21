@@ -1,5 +1,6 @@
 <?php 
 header('Access-Control-Allow-Origin: http://game251444.konggames.com');
+header('Access-Control-Allow-Origin: http://localhost');
 require ('db_connect.php');
 $replays = [];
 $s = "SELECT * FROM oa_best_race WHERE trackid=".$_POST["map"]." ORDER BY time";
