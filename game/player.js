@@ -101,20 +101,36 @@ function Player() {
 			if (Math.abs(this.speed[i]) > this.maxSpeed)
 				this.speed[i] = Math.sign(this.speed[0]) * this.maxSpeed;
 			if (this.airTime === 0) {
+				var speed = (Math.distance([0, 0], this.speed) * (1 - m.map.grassSlow))
+				var t = 0.06 / (speed * 50);
+				if (settings.mute) {
+					gain.gain.value = 0;
+				}
+				else if (typeof(window.AudioContext) !== 'undefined') {  // like... fuck off IE 
+					gain.gain.value = Math.sqrt(speed) / 5;
+				}
+				if (typeof(window.AudioContext) !== 'undefined')   // like... fuck off IE
+					osc.frequency.value = speed * 4000;
+				grassEmitter.rate.nextTime = t;
+				roadEmitter.rate.nextTime = t * 5;
 				if (dist > m.map.pathWidth / 2) {
 					this.speed[i] *= m.map.grassSlow;
 					if (!settings.mute)
 						sounds.grass.play();
-					if (settings.parts) 
+					if (settings.parts) {
 						grassEmitter.behaviours[1] = new Proton.Alpha(0.5, 0);
-					grassEmitter.rate.nextTime = 0.06 / ((Math.distance([0, 0], this.speed) * (1 - m.map.grassSlow)) * 50);
+						roadEmitter.behaviours[1] = new Proton.Alpha(0, 0);
+					}
 					this.lastState = "grass";
 				}
 				else {
 					sounds.grass.pause();
 					sounds.grass.currentTime = 0;
 					this.lastState = "road";
-					grassEmitter.behaviours[1] = new Proton.Alpha(0, 0);
+					if (settings.parts) {
+						grassEmitter.behaviours[1] = new Proton.Alpha(0, 0);
+						roadEmitter.behaviours[1] = new Proton.Alpha(0.5, 0);
+					}
 				}
 				if (dist > Math.max(m.map.grassWidth, m.map.pathWidth) / 2)
 					this.die();
@@ -124,11 +140,14 @@ function Player() {
 				if (this.airTime >= this.jumpLen) {
 					this.airTime = 0;
 					this.jumpLen = 0;
+					roadEmitter.behaviours[1] = new Proton.Alpha(0, 0);
 				}
 			}
 		}
 		grassEmitter.p.x = this.pos[0];
 		grassEmitter.p.y = this.pos[1];
+		roadEmitter.p.x = this.pos[0];
+		roadEmitter.p.y = this.pos[1];
 		//replay
 		if (!this.finished && this.started)
 			replay.data.push([Math.floor(this.pos[0]), Math.floor(this.pos[1])]);

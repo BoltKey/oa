@@ -33,8 +33,12 @@ function draw() {
 		if (userid === -1) {
 			ctx.fillText("Log in to ", 50, canvas.height - 20);
 			ctx.drawImage(graphics.kongregate_white, 85, canvas.height - 45, 214, 32);
-			ctx.fillText("to compare with other players and submit your times", 485, canvas.height - 20);
+			ctx.fillText("to compare with other players and submit your times (you will not lose progress)", 595, canvas.height - 20);
 		}
+		else {
+			ctx.fillText("Your times will be submitted under your Kongregate username '" + userName + "'", 300, canvas.height - 20);
+		}
+		ctx.drawImage(graphics.orlogo, 500, 30, 350, 300);
 	}
 }
 

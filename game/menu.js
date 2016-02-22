@@ -2,7 +2,8 @@ var menuButtons = [
 {display: "Help/About", pos: [50, 550], w: 100, click: "toAbout()", menu:[1]},
 {display: "Display best ghosts", pos: [180, 550], w: 150, click: 'changeSetting("gho")', menu:[1], id: 'sgho'},
 {display: "Display your ghost", pos: [180, 500], w: 150, click: 'changeSetting("plgho")', menu:[1], id: 'splgho'},
-{display: "Mute", pos: [340, 500], w: 150, click: 'changeSetting("mute")', menu:[1], id: 'smute'},
+{display: "Mute sounds", pos: [340, 500], w: 150, click: 'changeSetting("mute")', menu:[1], id: 'smute'},
+{display: "Music", pos: [500, 500], w: 150, click: 'changeSetting("music")', menu:[1], id: 'smusic'},
 {display: "Particle effects", pos: [340, 550], w: 150, click: 'changeSetting("parts")', menu:[1], id: 'sparts'},
 ];
 var levelParams = {x: 50, y: 40, padding: [180, 4], rows: 10, w: 35};

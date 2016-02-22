@@ -1,4 +1,4 @@
-var orig = "http://localhost/optimize_accel/";
+var orig = "http://boltkey.cz/optimal_racer/";
 function entry(name) {
 	console.log("Entrying '" + name + "'");
 	$.ajax({
@@ -7,7 +7,17 @@ function entry(name) {
 		crossDomain: true,
 		success: function(data) {
 			console.log(data);
-			userid = data;
+			data = JSON.parse(data);
+			userid = data[1];
+			if (data[0] === 'new') {
+				console.log("importing from local storage");
+				for (var i = 0; i < maps.length; ++i) {
+					replay.load(i + "best");
+					if (replay.data.length > 0) {
+						submitTime(JSON.stringify(replay.data), i, replay.data.length);
+					}
+				}
+			}
 			userName = name;
 			loadUserBests();
 			//userid = data;
@@ -43,7 +53,7 @@ function loadUserBests() {
 	}
 }
 
-function submitTime(data) {
+function submitTime(data, map, manualtime) {
 	console.log("Submitting time");
 	$.ajax({
 		method: "POST",
@@ -51,8 +61,8 @@ function submitTime(data) {
 		data: {
 			userid: userid,
 			data: data,
-			time: time,
-			map: currMap,
+			time: manualtime || time,
+			map: map || currMap,
 			own: false
 		},
 		crossDomain: true,
